@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}
+Search
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid">
+    <div style="display:flex;">
+        <input type="text" id="searchTerm" style="width:100%;" placeholder="Enter the name of the movie or tv show." value="{{searchTerm}}">
+        <button class="btn-primary mx-4" onclick="Search()">Search</button>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <div class="row" 
+    {% if not searchTerm %}
+    style="display:none;"
+    {% endif %}
+    >
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Movies</h3>
+                    {% for movie in movies %}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <img src="{{movie.image_url}}" width="100%" height="auto">
+                                </div>
+                                <div class="col-9">
+                                    <h5>{{movie.title}} {{movie.year}}</h5>
+                                    <a class="btn btn-primary" href="{% url 'add_to_database' imDbId=movie.id %}">Add to Library</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3>TV Shows</h3>
+                    {% for show in shows %}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <img src="{{show.image_url}}" width="100%" height="auto">
+                                </div>
+                                <div class="col-9">
+                                    <h5>{{show.title}} {{show.year}}</h5>
+                                    <a class="btn btn-primary" href="{% url 'add_to_database' imDbId=show.id %}">Add to Library</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function Search(){
+        searchTerm = document.getElementById("searchTerm").value;
+        if(searchTerm != ""){
+            url = "/imdbsearch/" + searchTerm + "/"
+            window.location.href = url;
+        }
+        
+    }
+</script>
+{% endblock %}
