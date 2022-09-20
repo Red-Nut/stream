@@ -272,6 +272,37 @@ def AddToDatabase(request, imDbId):
                                 print(e)
                             return redirect("index")
 
+            # Actors
+            for item in json_response['companyList']:
+                imDbId=item['id']
+                name=item['name']
+                company = Company.objects.filter(imDbId=imDbId).first()
+                if company is None:
+                    try:
+                        company = Company.objects.create(
+                            imDbId=imDbId,
+                            name=name
+                        )
+                    except Exception as e:
+                        print("Error creating actor object")
+                        if hasattr(e, 'message'):
+                            print(e.message)
+                        else:
+                            print(e)
+                        return redirect("index")                    
+                try:
+                    movieCompany = MovieCompanies.objects.create(
+                        movie = movie,
+                        company = company
+                    )
+                except Exception as e:
+                    print("Error creating movie actor object")
+                    if hasattr(e, 'message'):
+                        print(e.message)
+                    else:
+                        print(e)
+                    return redirect("index")
+
 
             # Movie Ratings
             try:

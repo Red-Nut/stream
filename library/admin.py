@@ -23,13 +23,17 @@ class MovieActorAdmin(admin.TabularInline):
     model = MovieActors
 admin.site.register(Actor)
 
+class MovieCompanyAdmin(admin.TabularInline):
+    model = MovieCompanies
+admin.site.register(Company)
+
 class MovieRatingAdmin(admin.TabularInline):
     model = MovieRating
 
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('id', 'imDbId', 'title', 'year')
     search_fields = ['title', 'imDbId']
-    inlines = [MovieMeta, MovieGenreAdmin, MovieDirectorAdmin, MovieWriterAdmin, MovieActorAdmin, MovieRatingAdmin]
+    inlines = [MovieMeta, MovieGenreAdmin, MovieDirectorAdmin, MovieWriterAdmin, MovieActorAdmin, MovieCompanyAdmin,MovieRatingAdmin]
     def get_ordering(self, request):
         return ['title']
 admin.site.register(Movie, MovieAdmin)
