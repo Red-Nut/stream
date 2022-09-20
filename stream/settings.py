@@ -31,7 +31,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.10.10.78']
+ALLOWED_HOSTS = ['10.10.10.78', '10.10.10.10', 'stream.my.to']
 
 
 # Application definition
