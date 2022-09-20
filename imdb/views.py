@@ -29,20 +29,32 @@ def Search(request, searchTerm):
 
     movies = []
 
-    for object in json_response['results']:
-        result = {
-            'id' : object['id'],
-            'title' : object['title'],
-            'image_url' : object['image'],
-            'year' : object['description'],
-        }
+    if json_response['results'] is not None:
+        for object in json_response['results']:
+            result = {
+                'id' : object['id'],
+                'title' : object['title'],
+                'image_url' : object['image'],
+                'year' : object['description'],
+            }
 
-        movies.append(result)
+            movies.append(result)
+
+    else:
+        if json_response['errorMessage'] is not None:
+            result = {
+                'id' : None,
+                'title' : json_response['errorMessage'],
+                'image_url' : None,
+                'year' : "",
+            }
+            movies.append(result)
 
     # TV Shows
     query = 'https://imdb-api.com/api/searchSeries/' + settings.IMDB_APIKEY + '/'+ searchTerm
     APIresponse = requests.get(query, headers=headers)
 
+    
     try:
         json_response = json.loads(APIresponse.content.decode("utf-8"))
     except Exception as e:
@@ -53,15 +65,25 @@ def Search(request, searchTerm):
 
     shows = []
 
-    for object in json_response['results']:
-        result = {
-            'id' : object['id'],
-            'title' : object['title'],
-            'image_url' : object['image'],
-            'year' : object['description'],
-        }
+    if json_response['results'] is not None:
+        for object in json_response['results']:
+            result = {
+                'id' : object['id'],
+                'title' : object['title'],
+                'image_url' : object['image'],
+                'year' : object['description'],
+            }
 
-        shows.append(result)
+            shows.append(result)
+    else:
+        if json_response['errorMessage'] is not None:
+            result = {
+                'id' : None,
+                'title' : json_response['errorMessage'],
+                'image_url' : None,
+                'year' : "",
+            }
+            shows.append(result)
 
     context = {
         'searchTerm' : searchTerm,
