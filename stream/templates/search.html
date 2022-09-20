@@ -72,5 +72,11 @@ Search
         }
         
     }
+
+    $("#searchTerm").on('keyup', function (event) {
+        if (event.keyCode === 13) {
+            Search()
+        }
+    });
 </script>
 {% endblock %}

@@ -92,15 +92,77 @@ class Show(models.Model):
     title = models.CharField(max_length=255)
     year = models.IntegerField()
     image_url = models.CharField(max_length=1000, null=True, blank=True)
+    
+    def __str__(self):
+        return f"{self.title}"
+
+class ShowMeta(models.Model):
+    show = models.OneToOneField(Show,on_delete=models.CASCADE, related_name="mete_data")
+    release_date = models.DateField()
+    plot = models.CharField(max_length=1000)
+    content_rating = models.CharField(max_length=25)
 
 class Season(models.Model):
     show = models.ForeignKey(Show, related_name="Seasons", on_delete=models.CASCADE)
+    season_id = models.CharField(max_length=10)
     image_url = models.CharField(max_length=1000, null=True, blank=True)
 
+    def __str__(self):
+        return f"Season {self.season_id}"
+
 class Episode(models.Model):
-    eipsode_no = models.IntegerField()
+    episode_no = models.CharField(max_length=10)
     season = models.ForeignKey(Season,null=True, blank=True, related_name="season_episodes", on_delete=models.CASCADE)
     show = models.ForeignKey(Show,null=True, blank=True, related_name="show_episodes", on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    image_url = models.CharField(max_length=1000, null=True, blank=True)
+
+    def __str__(self):
+        return f"Episode {self.episode_no}"
+
+class EpisodeMeta(models.Model):
+    episode = models.OneToOneField(Episode,on_delete=models.CASCADE, related_name="mete_data")
+    plot = models.CharField(max_length=1000)
+
+class EpisodeRating(models.Model):
+    episode = models.OneToOneField(Episode,on_delete=models.CASCADE, related_name="ratings")
+    imDb = models.DecimalField(max_digits=5, decimal_places=1)
+
+
+    
+class ShowGenre(models.Model):
+    show = models.ForeignKey(Show,on_delete=models.CASCADE, related_name="genres")
+    genre = models.ForeignKey(Genre,on_delete=models.RESTRICT, related_name="shows")
+
+class ShowDirectors(models.Model):
+    show = models.ForeignKey(Show,on_delete=models.CASCADE, related_name="directors")
+    director = models.ForeignKey(Director,on_delete=models.RESTRICT, related_name="shows")
+
+class ShowWriters(models.Model):
+    show = models.ForeignKey(Show,on_delete=models.CASCADE, related_name="writers")
+    writer = models.ForeignKey(Writer,on_delete=models.RESTRICT, related_name="shows")
+
+class ShowActors(models.Model):
+    show = models.ForeignKey(Show,on_delete=models.CASCADE, related_name="actors")
+    actor = models.ForeignKey(Actor,on_delete=models.RESTRICT, related_name="shows")
+    character = models.CharField(max_length=100)
+    star = models.BooleanField(default=False)
+
+class ShowCompanies(models.Model):
+    show = models.ForeignKey(Show,on_delete=models.CASCADE, related_name="companies")
+    company = models.ForeignKey(Company,on_delete=models.RESTRICT, related_name="shows")
+
+class ShowRating(models.Model):
+    show = models.OneToOneField(Show,on_delete=models.CASCADE, related_name="ratings")
+    imDb = models.DecimalField(max_digits=5, decimal_places=1, null=True, blank=True)
+    metacritic = models.DecimalField(max_digits=5, decimal_places=1, null=True, blank=True)
+    #theMovieDb = models.DecimalField(max_digits=5, decimal_places=1)
+    #rottenTomatoes = models.IntegerField()
+    #filmAffinity = models.DecimalField(max_digits=5, decimal_places=1)
+
+
+
+
 
 
 
@@ -133,3 +195,7 @@ class UserSeasonRating(models.Model):
 class UserMovieLibrary(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_movies")
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE, related_name="user_libraries")
+
+class UserShowLibrary(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_shows")
+    show = models.ForeignKey(Show,on_delete=models.CASCADE, related_name="user_libraries")

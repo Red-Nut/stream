@@ -74,7 +74,7 @@ def Search(request, searchTerm):
 @login_required
 def AddToDatabase(request, imDbId):
     currentUser = request.user
-
+    show_imDbId = imDbId
 
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
     
@@ -272,7 +272,7 @@ def AddToDatabase(request, imDbId):
                                 print(e)
                             return redirect("index")
 
-            # Actors
+            # Companies
             for item in json_response['companyList']:
                 imDbId=item['id']
                 name=item['name']
@@ -284,7 +284,7 @@ def AddToDatabase(request, imDbId):
                             name=name
                         )
                     except Exception as e:
-                        print("Error creating actor object")
+                        print("Error creating company object")
                         if hasattr(e, 'message'):
                             print(e.message)
                         else:
@@ -296,7 +296,7 @@ def AddToDatabase(request, imDbId):
                         company = company
                     )
                 except Exception as e:
-                    print("Error creating movie actor object")
+                    print("Error creating movie company object")
                     if hasattr(e, 'message'):
                         print(e.message)
                     else:
@@ -334,7 +334,288 @@ def AddToDatabase(request, imDbId):
                 print(e)
             return redirect("index")
 
+    if json_response['type'] == "TVSeries":
+        show = Show.objects.filter(imDbId = imDbId).first()
+        if show is None:
+            # Show
+            try:
+                show = Show.objects.create(
+                    imDbId = imDbId,
+                    title = json_response['title'],
+                    year = json_response['year'],
+                    image_url = json_response['image'],
+                )
+    
+            except Exception as e:
+                print("Error creating show object")
+                if hasattr(e, 'message'):
+                    print(e.message)
+                else:
+                    print(e)
 
+                return redirect("index")
+
+            # Meta Data
+            try:
+                showMeta = ShowMeta.objects.create(
+                    show = show,
+                    release_date = json_response['releaseDate'],
+                    plot = json_response['plot'],
+                    content_rating = json_response['contentRating'],
+                )
+            except Exception as e:
+                print("Error creating show meta object")
+                if hasattr(e, 'message'):
+                    print(e.message)
+                else:
+                    print(e)
+                return redirect("index")
+
+            # Genres
+            for item in json_response['genreList']:
+                name=item['value']
+                genre = Genre.objects.filter(name=name).first()
+                if genre is None:
+                    try:
+                        genre = Genre.objects.create(
+                            name=name
+                        )
+                    except Exception as e:
+                        print("Error creating genre object")
+                        if hasattr(e, 'message'):
+                            print(e.message)
+                        else:
+                            print(e)
+                        return redirect("index")                    
+                try:
+                    showGenre = ShowGenre.objects.create(
+                        show = show,
+                        genre = genre
+                    )
+                except Exception as e:
+                    print("Error creating show genre object")
+                    if hasattr(e, 'message'):
+                        print(e.message)
+                    else:
+                        print(e)
+                    return redirect("index")
+
+            # Directors
+            for item in json_response['directorList']:
+                imDbId=item['id']
+                name=item['name']
+                director = Director.objects.filter(imDbId=imDbId).first()
+                if director is None:
+                    try:
+                        director = Director.objects.create(
+                            imDbId=imDbId,
+                            name=name
+                        )
+                    except Exception as e:
+                        print("Error creating director object")
+                        if hasattr(e, 'message'):
+                            print(e.message)
+                        else:
+                            print(e)
+                        return redirect("index")                    
+                try:
+                    showDirector = ShowDirectors.objects.create(
+                        show = show,
+                        director = director
+                    )
+                except Exception as e:
+                    print("Error creating show director object")
+                    if hasattr(e, 'message'):
+                        print(e.message)
+                    else:
+                        print(e)
+                    return redirect("index")
+
+            # Writers
+            for item in json_response['writerList']:
+                imDbId=item['id']
+                name=item['name']
+                writer = Writer.objects.filter(imDbId=imDbId).first()
+                if writer is None:
+                    try:
+                        writer = Writer.objects.create(
+                            imDbId=imDbId,
+                            name=name
+                        )
+                    except Exception as e:
+                        print("Error creating writer object")
+                        if hasattr(e, 'message'):
+                            print(e.message)
+                        else:
+                            print(e)
+                        return redirect("index")                    
+                try:
+                    showwriter = ShowWriters.objects.create(
+                        show = show,
+                        writer = writer
+                    )
+                except Exception as e:
+                    print("Error creating show writer object")
+                    if hasattr(e, 'message'):
+                        print(e.message)
+                    else:
+                        print(e)
+                    return redirect("index")
+
+            # Actors
+            for item in json_response['actorList']:
+                imDbId=item['id']
+                name=item['name']
+                image_url = item['image']
+                character = item['asCharacter']
+                actor = Actor.objects.filter(imDbId=imDbId).first()
+                if actor is None:
+                    try:
+                        actor = Actor.objects.create(
+                            imDbId=imDbId,
+                            name=name,
+                            image_url=image_url
+                        )
+                    except Exception as e:
+                        print("Error creating actor object")
+                        if hasattr(e, 'message'):
+                            print(e.message)
+                        else:
+                            print(e)
+                        return redirect("index")                    
+                try:
+                    showActor = ShowActors.objects.create(
+                        show = show,
+                        actor = actor,
+                        character=character
+                    )
+                except Exception as e:
+                    print("Error creating show actor object")
+                    if hasattr(e, 'message'):
+                        print(e.message)
+                    else:
+                        print(e)
+                    return redirect("index")
+
+            # Stars
+            for item in json_response['starList']:
+                imDbId=item['id']
+                actor = Actor.objects.filter(imDbId=imDbId).first()
+                if actor is not None:
+                    showActor = ShowActors.objects.filter(show=show, actor=actor).first()
+                    if showActor is not None:
+                        showActor.star = True   
+                        try:
+                            showActor.save()
+                        except Exception as e:
+                            print("Error saving actor as star in show")
+                            if hasattr(e, 'message'):
+                                print(e.message)
+                            else:
+                                print(e)
+                            return redirect("index")
+
+            # Companies
+            for item in json_response['companyList']:
+                imDbId=item['id']
+                name=item['name']
+                company = Company.objects.filter(imDbId=imDbId).first()
+                if company is None:
+                    try:
+                        company = Company.objects.create(
+                            imDbId=imDbId,
+                            name=name
+                        )
+                    except Exception as e:
+                        print("Error creating actor object")
+                        if hasattr(e, 'message'):
+                            print(e.message)
+                        else:
+                            print(e)
+                        return redirect("index")                    
+                try:
+                    showCompany = ShowCompanies.objects.create(
+                        show = show,
+                        company = company
+                    )
+                except Exception as e:
+                    print("Error creating show company object")
+                    if hasattr(e, 'message'):
+                        print(e.message)
+                    else:
+                        print(e)
+                    return redirect("index")
+
+
+            # Show Ratings
+            try:
+                showRating = ShowRating.objects.create(
+                    show = show,
+                    imDb = json_response['imDbRating'],
+                    metacritic = json_response['metacriticRating'],
+                )
+            except Exception as e:
+                print("Error creating show rating object")
+                if hasattr(e, 'message'):
+                    print(e.message)
+                else:
+                    print(e)
+                return redirect("index")
         
+
+        # Add to User Library
+        try:
+            library = UserShowLibrary.objects.create(
+                user = currentUser,
+                show = show,
+            )
+        except Exception as e:
+            print("Error adding show to user library")
+            if hasattr(e, 'message'):
+                print(e.message)
+            else:
+                print(e)
+            return redirect("index")
+
+        # Seasons
+        for item in json_response['tvSeriesInfo']['seasons']:
+            season = Season.objects.create(
+                show=show,
+                season_id = item,
+            )
+
+            # Episodes
+            query = 'https://imdb-api.com/api/seasonepisodes/' + settings.IMDB_APIKEY + '/' + show_imDbId + '/' + item
+            print(query)
+            APIresponse = requests.get(query, headers=headers)
+
+            try:
+                season_json_response = json.loads(APIresponse.content.decode("utf-8"))
+            except Exception as e:
+                if hasattr(e, 'message'):
+                    print(e.message)
+                else:
+                    print(e)
+
+            for episode_item in season_json_response['episodes']:
+                print()
+                episode = Episode.objects.create(
+                    episode_no = episode_item['episodeNumber'],
+                    season = season,
+                    show = show,
+                    title = episode_item['title'],
+                    image_url = episode_item['image']
+                )
+
+                episodeMeta = EpisodeMeta.objects.create(
+                    episode = episode,
+                    plot = episode_item['plot']
+                )
+
+                episodRating = EpisodeRating.objects.create(
+                    episode = episode,
+                    imDb = episode_item['imDbRating']
+                )
+
     
     return redirect("index")
