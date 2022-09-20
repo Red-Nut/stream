@@ -1,15 +1,17 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 from library.models import *
 
 import requests
 import json
 
+@login_required
 def SearchView(request):
-
     return render(request, "search.html")
 
+@login_required
 def Search(request, searchTerm):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
     
@@ -69,7 +71,7 @@ def Search(request, searchTerm):
 
     return render(request, "search.html", context)
 
-
+@login_required
 def AddToDatabase(request, imDbId):
     currentUser = request.user
 

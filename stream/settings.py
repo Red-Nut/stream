@@ -138,3 +138,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 IMDB_APIKEY = env('IMDB_APIKEY')
+
+LOGIN_REDIRECT_URL = "/"
