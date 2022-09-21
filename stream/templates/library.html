@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}
+Search
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="movies-tab" data-bs-toggle="tab" data-bs-target="#movies" type="button" role="tab" aria-controls="movies" aria-selected="true">Movies</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="shows-tab" data-bs-toggle="tab" data-bs-target="#shows" type="button" role="tab" aria-controls="shows" aria-selected="false">TV Series</button>
+        </li>
+    </ul>
+      
+    <div class="tab-content">
+        <!-- Movies -->
+        <div class="tab-pane active" id="movies" role="tabpanel" aria-labelledby="movies-tab">
+            <br>
+            <div class="row">
+            {% for movie in movies %}
+            {% if forloop.counter0|divisibleby:4 %}
+            </div><div class="row">
+            {% endif %}
+            {% ifchanged movie.year %}
+            </div><div class="row">
+            <hr>
+            <h3>{{movie.year}}</h3>
+            {% endifchanged %}
+
+            <div class="col-xl-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-3">
+                                <img src="{{movie.image_url}}" width="100%" height="auto">
+                            </div>
+                            <div class="col-9">
+                                <h5>{{movie.title}} ({{movie.year}})</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+            </div>
+        </div>
+
+        
+        <!-- Shows -->
+        <div class="tab-pane" id="shows" role="tabpanel" aria-labelledby="shows-tab">
+            <br>
+            <div class="row">
+            {% for show in shows %}
+            {% if forloop.counter0|divisibleby:4 %}
+            </div><div class="row">
+            {% endif %}
+
+            <div class="col-xl-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-3">
+                                <img src="{{show.image_url}}" width="100%" height="auto">
+                            </div>
+                            <div class="col-9">
+                                <h5>{{show.title}}</h5>
+                                <p>Seasons: {{show.seasons.count}}</p>
+                                <p>Seasons: {{show.seasons.count}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}    
+        </div>
+    </div>
+
+
+    
+
+    
+</div>
+
+{% endblock %}

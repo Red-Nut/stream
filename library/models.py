@@ -103,7 +103,7 @@ class ShowMeta(models.Model):
     content_rating = models.CharField(max_length=25)
 
 class Season(models.Model):
-    show = models.ForeignKey(Show, related_name="Seasons", on_delete=models.CASCADE)
+    show = models.ForeignKey(Show, related_name="seasons", on_delete=models.CASCADE)
     season_id = models.CharField(max_length=10)
     image_url = models.CharField(max_length=1000, null=True, blank=True)
 
@@ -112,8 +112,8 @@ class Season(models.Model):
 
 class Episode(models.Model):
     episode_no = models.CharField(max_length=10)
-    season = models.ForeignKey(Season,null=True, blank=True, related_name="season_episodes", on_delete=models.CASCADE)
-    show = models.ForeignKey(Show,null=True, blank=True, related_name="show_episodes", on_delete=models.CASCADE)
+    season = models.ForeignKey(Season,null=True, blank=True, related_name="episodes", on_delete=models.CASCADE)
+    show = models.ForeignKey(Show,null=True, blank=True, related_name="episodes", on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     image_url = models.CharField(max_length=1000, null=True, blank=True)
 
