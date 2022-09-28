@@ -60,6 +60,7 @@ class MovieMeta(models.Model):
 class MovieGenre(models.Model):
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE, related_name="genres")
     genre = models.ForeignKey(Genre,on_delete=models.RESTRICT, related_name="movies")
+    ignore = models.BooleanField(default=False)
 
 class MovieDirectors(models.Model):
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE, related_name="directors")

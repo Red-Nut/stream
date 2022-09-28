@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-Search
+Library
 {% endblock %}
 
 {% block main %}
@@ -18,26 +18,57 @@ Search
         <!-- Movies -->
         <div class="tab-pane active" id="movies" role="tabpanel" aria-labelledby="movies-tab">
             <br>
-            <div class="row">
+            <div class="row py-3">
             {% for movie in movies %}
-            {% if forloop.counter0|divisibleby:4 %}
-            </div><div class="row">
-            {% endif %}
             {% ifchanged movie.year %}
-            </div><div class="row">
+            </div><div class="row py-3">
             <hr>
             <h3>{{movie.year}}</h3>
             {% endifchanged %}
 
             <div class="col-xl-3">
-                <div class="card">
+                <div class="card m-0" style="height:100%;">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-3">
                                 <img src="{{movie.image_url}}" width="100%" height="auto">
                             </div>
                             <div class="col-9">
-                                <h5>{{movie.title}} ({{movie.year}})</h5>
+                                <!-- Title -->
+                                <h5 style="font-weight: bold;">{{movie.title}} ({{movie.year}})</h5>
+                                <!-- Genres -->
+                                {% for movieGenre in movie.genres.all %}
+                                {% if not movieGenre.ignore %}
+                                {{movieGenre.genre}}
+                                {% endif %}
+                                {% endfor %}
+                                <hr class="m-0">
+                                <!-- Ratings -->
+                                
+                                <p class="m-0">
+                                    <span>IMDB rating: </span>
+                                    <span style="font-weight: bold;
+                                        {% if movie.ratings.imDb >= 8.0 %}
+                                            color: LimeGreen;
+                                        {% elif movie.ratings.imDb < 6.0%}
+                                            color: red;
+                                        {% endif %}
+                                    ">
+                                        {{movie.ratings.imDb}}
+                                    </span>
+                                </p>
+                                <p class="m-0">
+                                    <span>Metacritic: </span>
+                                    <span style="font-weight: bold;
+                                        {% if movie.ratings.metacritic >= 80.0 %}
+                                            color: LimeGreen;
+                                        {% elif movie.ratings.metacritic < 50.0%}
+                                            color: red;
+                                        {% endif %}
+                                    ">
+                                        {{movie.ratings.metacritic}}
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -167,10 +167,18 @@ def AddToDatabase(request, imDbId):
                             print(e)
                         return redirect("index")                    
                 try:
-                    movieGenre = MovieGenre.objects.create(
-                        movie = movie,
-                        genre = genre
-                    )
+                    if name == "Animation" or name == "Biography" or name == "Crime" or name == "Family" or name == "Fantasy" or name == "History" or name=="Music" or name=="Mystery" or name=="Romance" or name=="Sport" or name=="War":
+                        movieGenre = MovieGenre.objects.create(
+                            movie = movie,
+                            genre = genre,
+                            ignore = True
+                        )
+                    else:
+                        movieGenre = MovieGenre.objects.create(
+                            movie = movie,
+                            genre = genre,
+                            ignore = False
+                        )
                 except Exception as e:
                     print("Error creating movie genre object")
                     if hasattr(e, 'message'):

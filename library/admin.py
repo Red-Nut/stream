@@ -4,39 +4,49 @@ from .models import *
 
 # Register your models here.
 
-class MovieMeta(admin.TabularInline):
+class MovieMetaInline(admin.TabularInline):
     model = MovieMeta
 
-class MovieGenreAdmin(admin.TabularInline):
+class MovieGenreInline(admin.TabularInline):
     model = MovieGenre
-admin.site.register(Genre)
 
-class MovieDirectorAdmin(admin.TabularInline):
+class MovieDirectorInline(admin.TabularInline):
     model = MovieDirectors
 admin.site.register(Director)
 
-class MovieWriterAdmin(admin.TabularInline):
+class MovieWriterInline(admin.TabularInline):
     model = MovieWriters
 admin.site.register(Writer)
 
-class MovieActorAdmin(admin.TabularInline):
+class MovieActorInline(admin.TabularInline):
     model = MovieActors
 admin.site.register(Actor)
 
-class MovieCompanyAdmin(admin.TabularInline):
+class MovieCompanyInline(admin.TabularInline):
     model = MovieCompanies
 admin.site.register(Company)
 
-class MovieRatingAdmin(admin.TabularInline):
+class MovieRatingInline(admin.TabularInline):
     model = MovieRating
 
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('id', 'imDbId', 'title', 'year')
     search_fields = ['title', 'imDbId']
-    inlines = [MovieMeta, MovieGenreAdmin, MovieDirectorAdmin, MovieWriterAdmin, MovieActorAdmin, MovieCompanyAdmin,MovieRatingAdmin]
+    inlines = [MovieMetaInline, MovieGenreInline, MovieDirectorInline, MovieWriterInline, MovieActorInline, MovieCompanyInline,MovieRatingInline]
     def get_ordering(self, request):
         return ['title']
 admin.site.register(Movie, MovieAdmin)
+
+class MovieInline(admin.TabularInline):
+    model = MovieGenre
+
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    search_fields = ['name']
+    inlines = [MovieInline]
+    def get_ordering(self, request):
+        return ['name']
+admin.site.register(Genre, GenreAdmin)
 
 
 class SeasonAdmin(admin.TabularInline):
