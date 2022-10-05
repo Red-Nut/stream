@@ -27,3 +27,23 @@ def UserLibrary(request, uid):
     }
 
     return render(request, "library.html", context)
+
+@login_required
+def MovieDetails(request, id):
+    movie = Movie.objects.get(id=id)
+
+    context = {
+        'movie' : movie,
+    }
+
+    return render(request, "movie.html", context)
+
+@login_required
+def ShowDetails(request, id):
+    show = Show.objects.get(id=id)
+
+    context = {
+        'show' : show,
+    }
+
+    return render(request, "show.html", context)
