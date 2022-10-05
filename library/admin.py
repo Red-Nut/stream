@@ -48,6 +48,14 @@ class GenreAdmin(admin.ModelAdmin):
         return ['name']
 admin.site.register(Genre, GenreAdmin)
 
+class MovieGenreAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title','year','genres_prop','ignored_genres_prop','removed_genres_prop')
+    search_fields = ['title_prop']
+    inlines = [MovieGenreInline]
+    def get_ordering(self, request):
+        return ['title']
+admin.site.register(MovieProxy, MovieGenreAdmin)
+
 
 class SeasonAdmin(admin.TabularInline):
     model = Season

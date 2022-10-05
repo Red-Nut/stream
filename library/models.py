@@ -49,6 +49,39 @@ class Movie(models.Model):
     def __str__(self):
         return f"{self.title} ({self.year})"
 
+    @property
+    def genres_prop(self):
+        genres = ""
+        for genre in self.genres.all():
+            if not genre.ignore and not genre.remove:
+                genres += genre.genre.name + ", "
+
+        if genres != "":
+            genres = genres[:-2]
+        return genres
+
+    @property
+    def ignored_genres_prop(self):
+        genres = ""
+        for genre in self.genres.all():
+            if genre.ignore and not genre.remove:
+                genres += genre.genre.name + ", "
+
+        if genres != "":
+            genres = genres[:-2]
+        return genres
+
+    @property
+    def removed_genres_prop(self):
+        genres = ""
+        for genre in self.genres.all():
+            if genre.remove:
+                genres += genre.genre.name + ", "
+
+        if genres != "":
+            genres = genres[:-2]
+        return genres
+
 class MovieMeta(models.Model):
     movie = models.OneToOneField(Movie,on_delete=models.CASCADE, related_name="mete_data")
     release_date = models.DateField()
@@ -61,6 +94,12 @@ class MovieGenre(models.Model):
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE, related_name="genres")
     genre = models.ForeignKey(Genre,on_delete=models.RESTRICT, related_name="movies")
     ignore = models.BooleanField(default=False)
+    remove = models.BooleanField(default=False)
+
+class MovieProxy(Movie):
+    class Meta:
+        proxy = True
+
 
 class MovieDirectors(models.Model):
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE, related_name="directors")
