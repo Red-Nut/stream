@@ -169,9 +169,9 @@ def AddToDatabase(request, imDbId):
                 try:
                     ignore = False
                     remove = False
-                    if name == "Animation" or name == "Biography" or name == "Crime" or name == "Family" or name == "History" or name=="Music" or name=="Mystery" or name=="Romance" or name=="Sport" or name=="War":
+                    if name == "Animation" or name == "Biography" or name == "Family" or name == "History" or name=="Music" or name=="Mystery" or name=="Romance" or name=="Sport" or name=="War":
                         ignore = True
-                    if name == "Fantasy":
+                    if name == "Crime" or name == "Fantasy":
                         remove = True
                     
                     movieGenre = MovieGenre.objects.create(

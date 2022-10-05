@@ -38,7 +38,7 @@ Library
                                 <h5 style="font-weight: bold;">{{movie.title}} ({{movie.year}})</h5>
                                 <!-- Genres -->
                                 {% for movieGenre in movie.genres.all %}
-                                {% if not movieGenre.ignore %}
+                                {% if not movieGenre.ignore and not movieGenre.remove and movieGenre.genre.name != "Kids" %}
                                 {{movieGenre.genre}}
                                 {% endif %}
                                 {% endfor %}
