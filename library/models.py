@@ -96,7 +96,7 @@ class MovieGenre(models.Model):
     ignore = models.BooleanField(default=False)
     remove = models.BooleanField(default=False)
 
-class MovieProxy(Movie):
+class MovieGenreProxy(Movie):
     class Meta:
         proxy = True
 
@@ -136,6 +136,39 @@ class Show(models.Model):
     def __str__(self):
         return f"{self.title}"
 
+    @property
+    def genres_prop(self):
+        genres = ""
+        for genre in self.genres.all():
+            if not genre.ignore and not genre.remove:
+                genres += genre.genre.name + ", "
+
+        if genres != "":
+            genres = genres[:-2]
+        return genres
+
+    @property
+    def ignored_genres_prop(self):
+        genres = ""
+        for genre in self.genres.all():
+            if genre.ignore and not genre.remove:
+                genres += genre.genre.name + ", "
+
+        if genres != "":
+            genres = genres[:-2]
+        return genres
+
+    @property
+    def removed_genres_prop(self):
+        genres = ""
+        for genre in self.genres.all():
+            if genre.remove:
+                genres += genre.genre.name + ", "
+
+        if genres != "":
+            genres = genres[:-2]
+        return genres
+
 class ShowMeta(models.Model):
     show = models.OneToOneField(Show,on_delete=models.CASCADE, related_name="mete_data")
     release_date = models.DateField()
@@ -173,6 +206,12 @@ class EpisodeRating(models.Model):
 class ShowGenre(models.Model):
     show = models.ForeignKey(Show,on_delete=models.CASCADE, related_name="genres")
     genre = models.ForeignKey(Genre,on_delete=models.RESTRICT, related_name="shows")
+    ignore = models.BooleanField(default=False)
+    remove = models.BooleanField(default=False)
+
+class ShowGenreProxy(Show):
+    class Meta:
+        proxy = True
 
 class ShowDirectors(models.Model):
     show = models.ForeignKey(Show,on_delete=models.CASCADE, related_name="directors")

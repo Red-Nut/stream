@@ -54,43 +54,51 @@ class MovieGenreAdmin(admin.ModelAdmin):
     inlines = [MovieGenreInline]
     def get_ordering(self, request):
         return ['title']
-admin.site.register(MovieProxy, MovieGenreAdmin)
+admin.site.register(MovieGenreProxy, MovieGenreAdmin)
 
 
-class SeasonAdmin(admin.TabularInline):
+class SeasonInline(admin.TabularInline):
     model = Season
 
-class EpisodeAdmin(admin.TabularInline):
+class EpisodeInline(admin.TabularInline):
     model = Episode
 
-class ShowMetaAdmin(admin.TabularInline):
+class ShowMetaInline(admin.TabularInline):
     model = ShowMeta
 
-class ShowGenreAdmin(admin.TabularInline):
+class ShowGenreInline(admin.TabularInline):
     model = ShowGenre
 
-class ShowDirectorAdmin(admin.TabularInline):
+class ShowDirectorInline(admin.TabularInline):
     model = ShowDirectors
 
-class ShowWriterAdmin(admin.TabularInline):
+class ShowWriterInline(admin.TabularInline):
     model = ShowWriters
 
-class ShowActorAdmin(admin.TabularInline):
+class ShowActorInline(admin.TabularInline):
     model = ShowActors
 
-class ShowCompanyAdmin(admin.TabularInline):
+class ShowCompanyInline(admin.TabularInline):
     model = ShowCompanies
 
-class ShowRatingAdmin(admin.TabularInline):
+class ShowRatingInline(admin.TabularInline):
     model = ShowRating
 
 class ShowAdmin(admin.ModelAdmin):
     list_display = ('id', 'imDbId', 'title', 'year')
     search_fields = ['title', 'imDbId']
-    inlines = [SeasonAdmin, EpisodeAdmin, ShowMetaAdmin, ShowGenreAdmin, ShowWriterAdmin, ShowActorAdmin, ShowCompanyAdmin, ShowRatingAdmin]
+    inlines = [SeasonInline, EpisodeInline, ShowMetaInline, ShowGenreInline, ShowWriterInline, ShowActorInline, ShowCompanyInline, ShowRatingInline]
     def get_ordering(self, request):
         return ['title']
 admin.site.register(Show, ShowAdmin)
+
+class ShowGenreAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title','year','genres_prop','ignored_genres_prop','removed_genres_prop')
+    search_fields = ['title_prop']
+    inlines = [ShowGenreInline]
+    def get_ordering(self, request):
+        return ['title']
+admin.site.register(ShowGenreProxy, ShowGenreAdmin)
 
 class EpisodeMetaAdmin(admin.TabularInline):
     model = EpisodeMeta
