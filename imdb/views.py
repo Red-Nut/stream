@@ -169,9 +169,9 @@ def AddToDatabase(request, imDbId):
                 try:
                     ignore = False
                     remove = False
-                    if name == "Animation" or name == "Biography" or name == "Family" or name == "History" or name=="Music" or name=="Mystery" or name=="Romance" or name=="Sport" or name=="War":
+                    if name == "Animation" or name == "Biography" or name == "Family" or name == "History" or name=="Romance" or name=="Sport" or name=="War":
                         ignore = True
-                    if name == "Crime" or name == "Fantasy":
+                    if name == "Crime" or name == "Fantasy" or name=="Music" or name=="Mystery":
                         remove = True
                     
                     movieGenre = MovieGenre.objects.create(
@@ -420,9 +420,18 @@ def AddToDatabase(request, imDbId):
                             print(e)
                         return redirect("index")                    
                 try:
+                    ignore = False
+                    remove = False
+                    if name == "Animation" or name == "Biography" or name == "Family" or name == "History" or name=="Romance" or name=="Sport" or name=="War":
+                        ignore = True
+                    if name == "Crime" or name == "Fantasy" or name=="Music" or name=="Mystery":
+                        remove = True
+
                     showGenre = ShowGenre.objects.create(
                         show = show,
-                        genre = genre
+                        genre = genre,
+                        ignore = ignore,
+                        remove = remove
                     )
                 except Exception as e:
                     print("Error creating show genre object")
