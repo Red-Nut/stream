@@ -275,6 +275,19 @@ class UserMovieLibrary(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_movies")
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE, related_name="user_libraries")
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields= ['user','movie'], name='unique_movie'),
+        ]
+
 class UserShowLibrary(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_shows")
     show = models.ForeignKey(Show,on_delete=models.CASCADE, related_name="user_libraries")
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields= ['user','show'], name='unique_show'),
+        ]
+
+
+
