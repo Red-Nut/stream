@@ -16,7 +16,7 @@ def CurrentUserLibrary(request):
 @login_required
 def UserLibrary(request, uid):
     movies = Movie.objects.filter(user_libraries__user__id=uid).all()
-    movies = movies.order_by('year', 'title')
+    movies = movies.order_by('-year', 'title')
 
     shows = Show.objects.filter(user_libraries__user__id=uid).all()
     shows = shows.order_by('title')
