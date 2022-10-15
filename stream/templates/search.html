@@ -30,6 +30,9 @@ Search
                                 </div>
                                 <div class="col-9">
                                     <h5>{{movie.title}} {{movie.year}}</h5>
+                                    {% if movie.other %}
+                                    <p>{{movie.other}}</p>
+                                    {% endif %}
                                     <a class="btn btn-primary" href="{% url 'add_to_database' imDbId=movie.id %}">Add to Library</a>
                                 </div>
                             </div>

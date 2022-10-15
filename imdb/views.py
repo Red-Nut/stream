@@ -31,11 +31,19 @@ def Search(request, searchTerm):
 
     if json_response['results'] is not None:
         for object in json_response['results']:
+            year = object['description']
+            other = None
+            if len(year)>4:
+                tryYear = year[:4]
+                if tryYear.isnumeric():
+                    other = year[5:]
+                    year = "(" + tryYear + ")"
             result = {
                 'id' : object['id'],
                 'title' : object['title'],
                 'image_url' : object['image'],
-                'year' : object['description'],
+                'year' : year,
+                'other' : other,
             }
 
             movies.append(result)
@@ -47,6 +55,7 @@ def Search(request, searchTerm):
                 'title' : json_response['errorMessage'],
                 'image_url' : None,
                 'year' : "",
+                'other' : None,
             }
             movies.append(result)
 
@@ -54,7 +63,6 @@ def Search(request, searchTerm):
     query = 'https://imdb-api.com/api/searchSeries/' + settings.IMDB_APIKEY + '/'+ searchTerm
     APIresponse = requests.get(query, headers=headers)
 
-    
     try:
         json_response = json.loads(APIresponse.content.decode("utf-8"))
     except Exception as e:
@@ -67,14 +75,20 @@ def Search(request, searchTerm):
 
     if json_response['results'] is not None:
         for object in json_response['results']:
-            result = {
-                'id' : object['id'],
-                'title' : object['title'],
-                'image_url' : object['image'],
-                'year' : object['description'],
-            }
+            if object['resultType'] == "Title":
+                year = object['description']
+                tryYear = year[1:5]
+                if tryYear.isnumeric():
+                    year = "(" + tryYear + ")"
 
-            shows.append(result)
+                result = {
+                    'id' : object['id'],
+                    'title' : object['title'],
+                    'image_url' : object['image'],
+                    'year' : year,
+                }
+
+                shows.append(result)
     else:
         if json_response['errorMessage'] is not None:
             result = {
