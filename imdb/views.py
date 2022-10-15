@@ -26,27 +26,28 @@ def Search(request, searchTerm):
             print(e.message)
         else:
             print(e)
-
+            
     movies = []
 
     if json_response['results'] is not None:
         for object in json_response['results']:
-            year = object['description']
-            other = None
-            if len(year)>4:
-                tryYear = year[:4]
-                if tryYear.isnumeric():
-                    other = year[5:]
-                    year = "(" + tryYear + ")"
-            result = {
-                'id' : object['id'],
-                'title' : object['title'],
-                'image_url' : object['image'],
-                'year' : year,
-                'other' : other,
-            }
+            if not "TV Series" in object['description']:
+                year = object['description']
+                other = None
+                if len(year)>4:
+                    tryYear = year[:4]
+                    if tryYear.isnumeric():
+                        other = year[5:]
+                        year = "(" + tryYear + ")"
+                result = {
+                    'id' : object['id'],
+                    'title' : object['title'],
+                    'image_url' : object['image'],
+                    'year' : year,
+                    'other' : other,
+                }
 
-            movies.append(result)
+                movies.append(result)
 
     else:
         if json_response['errorMessage'] is not None:
@@ -71,11 +72,12 @@ def Search(request, searchTerm):
         else:
             print(e)
 
+    
     shows = []
 
     if json_response['results'] is not None:
         for object in json_response['results']:
-            if object['resultType'] == "Title":
+            if object['resultType'] == "Title" or "TV Series" in object['description']:
                 year = object['description']
                 tryYear = year[1:5]
                 if tryYear.isnumeric():
