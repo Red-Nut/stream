@@ -26,14 +26,14 @@ Library
             <h3>{{movie.year}}</h3>
             {% endifchanged %}
 
-            <div class="col-xl-3" onclick="window.location.href = 'movie/{{movie.id}}';">
+            <div class="col-xl-3 link p-1" onclick="window.location.href = 'movie/{{movie.id}}';">
                 <div class="card m-0" style="height:100%;">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-3">
+                    <div class="card-body p-1">
+                        <div class="row m-0">
+                            <div class="col-3 p-0">
                                 <img src="{{movie.image_url}}" width="100%" height="auto">
                             </div>
-                            <div class="col-9">
+                            <div class="col-9 pe-0 ps-2">
                                 <!-- Title -->
                                 <h5 style="font-weight: bold;">{{movie.title}} ({{movie.year}})</h5>
                                 <!-- Genres -->
@@ -89,14 +89,14 @@ Library
             </div><div class="row">
             {% endif %}
 
-            <div class="col-xl-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-3">
+            <div class="col-xl-3 link p-1" onclick="window.location.href = 'series/{{show.id}}';">
+                <div class="card m-0" style="height:100%;">
+                    <div class="card-body p-1">
+                        <div class="row m-0">
+                            <div class="col-3 p-0">
                                 <img src="{{show.image_url}}" width="100%" height="auto">
                             </div>
-                            <div class="col-9">
+                            <div class="col-9 pe-0 ps-2">
                                 <!-- Title -->
                                 <h5>{{show.title}}</h5>
                                 <!-- Seasons -->
