@@ -97,9 +97,37 @@ Library
                                 <img src="{{show.image_url}}" width="100%" height="auto">
                             </div>
                             <div class="col-9">
+                                <!-- Title -->
                                 <h5>{{show.title}}</h5>
-                                <p>Seasons: {{show.seasons.count}}</p>
-                                <p>Seasons: {{show.seasons.count}}</p>
+                                <!-- Seasons -->
+                                Seasons: {{show.seasons.count}}
+                                <hr class="m-0">
+
+                                <!-- Ratings -->
+                                <p class="m-0">
+                                    <span>IMDB rating: </span>
+                                    <span style="font-weight: bold;
+                                        {% if movie.ratings.imDb >= 8.0 %}
+                                            color: LimeGreen;
+                                        {% elif movie.ratings.imDb < 6.0%}
+                                            color: red;
+                                        {% endif %}
+                                    ">
+                                        {{movie.ratings.imDb}}
+                                    </span>
+                                </p>
+                                <p class="m-0">
+                                    <span>Metacritic: </span>
+                                    <span style="font-weight: bold;
+                                        {% if movie.ratings.metacritic >= 80.0 %}
+                                            color: LimeGreen;
+                                        {% elif movie.ratings.metacritic < 50.0%}
+                                            color: red;
+                                        {% endif %}
+                                    ">
+                                        {{movie.ratings.metacritic}}
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>
