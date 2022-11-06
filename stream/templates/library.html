@@ -7,27 +7,34 @@ Library
 <div class="container-fluid">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="movies-tab" data-bs-toggle="tab" data-bs-target="#movies" type="button" role="tab" aria-controls="movies" aria-selected="true">Movies</button>
+            <button style="background-color:rgb(14, 25, 26); color:white;" class="nav-link active" id="movies-tab" data-bs-toggle="tab" data-bs-target="#movies" type="button" role="tab" aria-controls="movies" aria-selected="true"><strong>Movies</strong></button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="shows-tab" data-bs-toggle="tab" data-bs-target="#shows" type="button" role="tab" aria-controls="shows" aria-selected="false">TV Series</button>
+            <button  style="background-color:rgb(14, 25, 26); color:white;" class="nav-link" id="shows-tab" data-bs-toggle="tab" data-bs-target="#shows" type="button" role="tab" aria-controls="shows" aria-selected="false"><strong>TV Series</strong></button>
         </li>
     </ul>
       
     <div class="tab-content">
         <!-- Movies -->
         <div class="tab-pane active" id="movies" role="tabpanel" aria-labelledby="movies-tab">
-            <br>
-            <div class="row py-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row py-3">
             {% for movie in movies %}
             {% ifchanged movie.year %}
-            </div><div class="row py-3">
-            <hr>
+            {% if forloop.counter != 1 %}
+            </div></div></div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row py-3">
             <h3>{{movie.year}}</h3>
+            {% else %}
+            <h3>{{movie.year}}</h3>
+            {% endif %}
             {% endifchanged %}
-
+            
             <div class="col-xl-3 link p-1" onclick="window.location.href = 'movie/{{movie.id}}';">
-                <div class="card m-0" style="height:100%;">
+                <div class="card m-0" style="height:100%; border-color: var(--base-color);">
                     <div class="card-body p-1">
                         <div class="row m-0">
                             <div class="col-3 p-0">
@@ -74,9 +81,8 @@ Library
                     </div>
                 </div>
             </div>
-
             {% endfor %}
-            </div>
+            </div></div></div>
         </div>
 
         

@@ -10,62 +10,86 @@
             <img src="{{movie.image_url}}" width="100%" height="auto">
         </div>
         <div class="col-9">
-            <!-- Title -->
-            <h1 style="font-weight: bold;">{{movie.title}} ({{movie.year}})</h1>
-            <!-- Plot -->
-            <p>{{movie.mete_data.plot}}</p>
-            <!-- Relase Date -->
-            <p><b>Release Date:</b> {{movie.mete_data.release_date}}</p>
-            <!-- Runtime -->
-            <p><b>Runtime:</b> {{movie.mete_data.runtime_str}}</p>
-            <!-- Genres -->
-            <p><b>Genre:</b>
-                {% for movieGenre in movie.genres.all %}
-                {% if not movieGenre.ignore and not movieGenre.remove and movieGenre.genre.name != "Kids" %}
-                {{movieGenre.genre}}
-                {% endif %}
-                {% endfor %}
-            </p>
-            <!-- Secondary Genres -->
-            <p><b>Secondary Genre:</b>
-                {% for movieGenre in movie.genres.all %}
-                {% if movieGenre.ignore and not movieGenre.remove and movieGenre.genre.name != "Kids" %}
-                {{movieGenre.genre}}
-                {% endif %}
-                {% endfor %}
-            </p>
+            <div class="card">
+                <div class="card-body">
+                    <!-- Title -->
+                    <h1 style="font-weight: bold;">{{movie.title}} ({{movie.year}})</h1>
+                    <!-- Plot -->
+                    <p>{{movie.mete_data.plot}}</p>
+                    <!-- Relase Date -->
+                    <p><b>Release Date:</b> {{movie.mete_data.release_date}}</p>
+                    <!-- Runtime -->
+                    <p><b>Runtime:</b> {{movie.mete_data.runtime_str}}</p>
+                    <!-- Genres -->
+                    <p><b>Genre:</b>
+                        {% for movieGenre in movie.genres.all %}
+                        {% if not movieGenre.ignore and not movieGenre.remove and movieGenre.genre.name != "Kids" %}
+                        {{movieGenre.genre}}
+                        {% endif %}
+                        {% endfor %}
+                    </p>
+                    <!-- Secondary Genres -->
+                    <p><b>Secondary Genre:</b>
+                        {% for movieGenre in movie.genres.all %}
+                        {% if movieGenre.ignore and not movieGenre.remove and movieGenre.genre.name != "Kids" %}
+                        {{movieGenre.genre}}
+                        {% endif %}
+                        {% endfor %}
+                    </p>
 
-            <hr class="m-0">
+                    <hr>
 
-            <!-- Ratings -->
-            <p class="m-0">
-                <span>IMDB rating: </span>
-                <span style="font-weight: bold;
-                    {% if movie.ratings.imDb >= 8.0 %}
-                        color: LimeGreen;
-                    {% elif movie.ratings.imDb < 6.0%}
-                        color: red;
-                    {% endif %}
-                ">
-                    {{movie.ratings.imDb}}
-                </span>
-            </p>
-            <p class="m-0">
-                <span>Metacritic: </span>
-                <span style="font-weight: bold;
-                    {% if movie.ratings.metacritic >= 80.0 %}
-                        color: LimeGreen;
-                    {% elif movie.ratings.metacritic < 50.0%}
-                        color: red;
-                    {% endif %}
-                ">
-                    {{movie.ratings.metacritic}}
-                </span>
-            </p>
-            
-            <hr class="m-0">
+                    <!-- Ratings -->
+                    <p class="m-0">
+                        <span>IMDB rating: </span>
+                        <span style="font-weight: bold;
+                            {% if movie.ratings.imDb >= 8.0 %}
+                                color: LimeGreen;
+                            {% elif movie.ratings.imDb < 6.0%}
+                                color: red;
+                            {% endif %}
+                        ">
+                            {{movie.ratings.imDb}}
+                        </span>
+                    </p>
+                    <p class="m-0">
+                        <span>Metacritic: </span>
+                        <span style="font-weight: bold;
+                            {% if movie.ratings.metacritic >= 80.0 %}
+                                color: LimeGreen;
+                            {% elif movie.ratings.metacritic < 50.0%}
+                                color: red;
+                            {% endif %}
+                        ">
+                            {{movie.ratings.metacritic}}
+                        </span>
+                    </p>
+                    
+                    <hr>
 
+                    <!-- Stars -->
+                    <p><b>Starring:</b>
+                        {% for actor in movie.actors.all %}
+                        {% if actor.star %}
+                        {% if not forloop.first %}
+                        ,
+                        {% endif %}
+                        {{actor.actor}}
+                        {% endif %}
+                        {% endfor %}
+                    </p>
 
+                    <!-- Stars -->
+                    <p><b>Directors:</b>
+                        {% for director in movie.directors.all %}
+                        {% if not forloop.first %}
+                        ,
+                        {% endif %}
+                        {{director.director}}
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
     
